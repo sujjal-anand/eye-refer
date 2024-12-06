@@ -170,11 +170,10 @@ const DashboardLayout = () => {
               // Optional spinner or loading indicator can be placed here
               <div>Loading notifications...</div>
             ) : notificationStatus?.status === "green" ? (
-              <MdOutlineNotificationsActive className="text-green-500 text-4xl" />
-            ) : (
               <MdOutlineNotificationsActive
-                className="text-red-500 text-4xl"
+                className="text-green-500 text-4xl"
                 onClick={async () => {
+                  // Perform the API call
                   await axios.put(
                     "http://localhost:5001/users/getallnotification",
                     {},
@@ -187,6 +186,20 @@ const DashboardLayout = () => {
                   queryClient.invalidateQueries({
                     queryKey: ["notificationStatus"],
                   });
+                  // Navigate to the notification page
+                  navigate("/app/notification");
+
+                  // Invalidate the notification status query
+                }}
+              />
+            ) : (
+              <MdOutlineNotificationsActive
+                className="text-red-500 text-4xl"
+                onClick={() => {
+                  navigate("/app/notification"); // Navigate to the notification page
+                  queryClient.invalidateQueries({
+                    queryKey: ["notificationStatus"],
+                  }); // Invalidate the notification status query
                 }}
               />
             )}
