@@ -1,0 +1,15 @@
+.full {
+  margin: 0 -26px 0 287px;
+  font-size: small;
+  padding-bottom: 300px;
+}
+.heading {
+  padding: 0 0 31px;
+}
+.search {
+  padding: 0 0 33px;
+  font-size: 15px;
+}
+.dashboard {
+  background-color: #ecf1f3;
+}
