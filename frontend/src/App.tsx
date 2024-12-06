@@ -26,6 +26,7 @@ import ForgotPasswordForm from "./components/Forgotpassword";
 import AppointmentList from "./components/appointmentlist";
 import Patientsreceived from "./components/patientreceive";
 import Updateappointment from "./components/Updateappointment";
+import Notification from "./components/Notification";
 // import Chathistory from "./components/Chathistory";
 
 function App() {
@@ -39,8 +40,9 @@ function App() {
           <Route path="/verification" element={<Otpverification />} />
           <Route path="/staff" element={<Staff />} />
           <Route path="/forgotpassword" element={<ForgotPasswordForm />} />
-
           <Route path="/app" element={<Apps />}>
+            <Route path="notification" element={<Notification />} />
+
             <Route path="chat" element={<Chat />} />
             <Route path="patientreceived" element={<Patientsreceived />} />
             <Route
