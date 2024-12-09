@@ -68,6 +68,24 @@ const Profile = () => {
   }
   console.log(data);
 
+  // getaddress
+
+  const { data: getaddresses } = useQuery({
+    queryKey: ["getaddresses"],
+    queryFn: async () => {
+      const response = await axios.get(
+        `${Local.BASE_URL}/${Local.GET_ADDRESS}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(Local.GET_ADDRESS);
+      return response?.data;
+    },
+  });
+  console.log(getaddresses);
   // Address Update Mutation
   const updateAddressMutation = useMutation({
     mutationKey: ["updateAddress"],
