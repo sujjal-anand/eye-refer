@@ -94,7 +94,7 @@ const Profile = () => {
       console.log("Address Update Response:", response);
     },
   });
-
+  console.log(Local.DELETE_ADDRESS);
   const deleteAddressMutation = useMutation({
     mutationKey: ["deleteAddress"],
     mutationFn: async (addressId: number) => {

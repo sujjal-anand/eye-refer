@@ -76,7 +76,7 @@ userRoutes.put(
   updatedoctor
 );
 userRoutes.post("/addaddress", JWT, addaddress);
-userRoutes.delete("/deletestaff/:id", deleteaddress);
+userRoutes.delete("/deleteaddress/:id", deleteaddress);
 userRoutes.post("/addstaff", JWT, addstaff);
 userRoutes.get("/getstaff", JWT, getstaff);
 userRoutes.delete("/deletestaff/:id", deletestaff);

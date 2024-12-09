@@ -95,34 +95,33 @@ const Doctors = () => {
       </div>
 
       {doctors.length > 0 ? (
-        <div className="w-[78%] relative left-[-13px] bg-white shadow-lg rounded-lg p-8 ml-[250px] mr-4">
+        <div className="w-[78%] relative left-[-13px] bg-white shadow-lg rounded-lg p-8 ml-[250px] mr-4 font-normal text-sm leading-[1.43] tracking-[0.01071em] table-cell align-middle">
           <div className="overflow-x-auto">
             <table className="w-full bg-white text-center rounded border-collapse mb-2">
-              <thead>
+              <thead className=" text-nowrap">
                 <tr className="bg-white">
-                  <th className="py-3 px-6 text-left font-semibold text-gray-700 w-2/6">
+                  <th className=" px-3 text-left font-semibold text-gray-700 w-2/6">
                     Name
                   </th>
-
-                  <th className="py-3 px-6 text-left font-semibold text-gray-700 w-1/6">
+                  <th className="py-1 px-3 text-left font-semibold text-gray-700 w-1/6">
                     Referral Placed
                   </th>
-                  <th className="py-3 px-6 text-left font-semibold text-gray-700 w-1/6">
+                  <th className="py-1 px-3 text-left font-semibold text-gray-700 w-1/6">
                     Referral Completed
                   </th>
-                  <th className="py-3 px-6 text-left font-semibold text-gray-700 w-1/6">
+                  <th className="py-1 px-3 text-left font-semibold text-gray-700 w-1/6">
                     Avg Time of Contact (mins)
                   </th>
-                  <th className="py-3 px-6 text-left font-semibold text-gray-700 w-1/6">
+                  <th className="py-1 px-3 text-left font-semibold text-gray-700 w-1/6">
                     Avg Time of Consult (mins)
                   </th>
-                  <th className="py-3 px-6 text-left font-semibold text-gray-700 w-1/6">
+                  <th className="py-1 px-3 text-left font-semibold text-gray-700 w-1/6">
                     Phone
                   </th>
-                  <th className="py-3 px-6 text-left font-semibold text-gray-700 w-2/6">
+                  <th className="py-1 px-3 text-left font-semibold text-gray-700 w-2/6">
                     Email
                   </th>
-                  <th className="py-3 px-6 text-left font-semibold text-gray-700 w-1/6">
+                  <th className="py-1 px-3 text-left font-semibold text-gray-700 w-1/6">
                     Doctor Type
                   </th>
                 </tr>
@@ -130,10 +129,9 @@ const Doctors = () => {
               <tbody>
                 {doctors.map((doctor: any) => (
                   <tr key={doctor.id} className="border-b hover:bg-gray-50">
-                    <td className="py-3 px-6">
+                    <td className="py-1 px-1">
                       Dr. {doctor.firstname} {doctor.lastname}
                     </td>
-
                     <td className="py-3 px-6">{doctor.referralPlaced || 0}</td>
                     <td className="py-3 px-6">
                       {doctor.referralCompleted || 0}
@@ -154,7 +152,11 @@ const Doctors = () => {
           </div>
         </div>
       ) : (
-        <p className="text-center text-gray-500">No doctors found</p>
+        <div className="w-[78%] relative left-[-13px] bg-white shadow-lg rounded-lg p-8 ml-[250px] mr-4">
+          <p className="text-center text-gray-700 w-3/4 mx-auto my-4 text-sm leading-[1.43]">
+            No doctors found. Please add some doctors to view their details.
+          </p>
+        </div>
       )}
 
       {/* Pagination Numbers */}

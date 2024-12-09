@@ -42,7 +42,7 @@ const ODdashboard = () => {
   useEffect(() => {
     const fetchReferredPatients = async () => {
       const response = await axios.get(
-        `${Local.BASE_URL}/${Local.GET_REFERRED_PATIENT}?page=${currentPage}&limit=2&search=${search}`,
+        `${Local.BASE_URL}/${Local.GET_REFERRED_PATIENT}?page=${currentPage}&limit=10&search=${search}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -52,7 +52,7 @@ const ODdashboard = () => {
       setpatientcount(response?.data.count);
       setreferredpatient(response?.data.rows);
       setreferredcompleted(response.data.refercompleted);
-      setTotalPages(Math.ceil(response?.data.count / 2));
+      setTotalPages(Math.ceil(response?.data.count / 10));
     };
     if (token) {
       fetchReferredPatients();

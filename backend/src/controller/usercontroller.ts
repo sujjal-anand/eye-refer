@@ -919,20 +919,16 @@ export const checknotificationstatus = async (req: any, res: any) => {
 };
 export const deleteaddress = async (req: any, res: any) => {
   try {
-    // Extract the `id` from `req.params`
     const { id } = req.params;
 
-    // Check if the id exists
     const deletedCount = await Addresses.destroy({ where: { id } });
 
     if (deletedCount === 0) {
       return res.status(404).json({ message: "Address not found" });
     }
 
-    // Send a success response
     res.status(200).json({ message: "Address deleted successfully" });
   } catch (error) {
-    // Handle errors
     console.error(error);
     res.status(500).json({ message: "Internal Server Error", error });
   }
