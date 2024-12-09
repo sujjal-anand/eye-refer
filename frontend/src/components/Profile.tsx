@@ -28,7 +28,7 @@ const Profile = () => {
   const [doctormodal, setdoctormodal] = useState(false);
   const [addressmodal, setaddressmodal] = useState(false);
   const [photo, setphoto] = useState<any>();
-  console.log(doctormodal);
+
   // Doctor Profile Update Mutation
   const updateDoctorMutation = useMutation({
     mutationKey: ["updateDoctor"],
@@ -63,13 +63,6 @@ const Profile = () => {
     },
   });
 
-  if (isLoading) {
-    <div>....loading</div>;
-  }
-  console.log(data);
-
-  // getaddress
-
   const { data: getaddresses } = useQuery({
     queryKey: ["getaddresses"],
     queryFn: async () => {
@@ -81,16 +74,14 @@ const Profile = () => {
           },
         }
       );
-      console.log(Local.GET_ADDRESS);
       return response?.data;
     },
   });
-  console.log(getaddresses);
+
   // Address Update Mutation
   const updateAddressMutation = useMutation({
     mutationKey: ["updateAddress"],
     mutationFn: async (values: any) => {
-      console.log(values);
       const response = await axios.post(
         `${Local.BASE_URL}/${Local.ADD_ADDRESS}`,
         values,
@@ -103,7 +94,27 @@ const Profile = () => {
       console.log("Address Update Response:", response);
     },
   });
-  console.log(data?.doctor, "<><><<<<<<<<<<<<<<<<<<<<<<<>>>>>");
+
+  const deleteAddressMutation = useMutation({
+    mutationKey: ["deleteAddress"],
+    mutationFn: async (addressId: number) => {
+      const response = await axios.delete(
+        `${Local.BASE_URL}/${Local.DELETE_ADDRESS}/${addressId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      queryClient.invalidateQueries({ queryKey: ["getaddresses"] });
+      console.log("Address Deleted Response:", response);
+    },
+  });
+
+  if (isLoading) {
+    return <div>....loading</div>;
+  }
+
   return (
     <div className="p-6 flex flex-col items-center justify-center min-h-screen space-y-4">
       <img
@@ -125,8 +136,6 @@ const Profile = () => {
           <strong>Gender:</strong> {data?.doctor?.gender}
         </p>
       </div>
-
-      {/* Other content like buttons and forms */}
 
       {/* Doctor Profile Form Button */}
       <button
@@ -353,9 +362,9 @@ const Profile = () => {
                 <div className="flex justify-end mt-6">
                   <button
                     type="submit"
-                    className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded mr-2"
+                    className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mr-2"
                   >
-                    Save Changes
+                    Save Address
                   </button>
                   <button
                     type="button"
@@ -370,6 +379,45 @@ const Profile = () => {
           </Form>
         </Formik>
       )}
+
+      {/* Displaying Addresses */}
+      <div className="mt-4 flex justify-center items-center min-h-screen">
+        <div className="w-full max-w-4xl">
+          <h3 className="text-xl font-bold text-center mb-4">Addresses</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {getaddresses?.map((address: any) => (
+              <div
+                key={address.id}
+                className="bg-white border border-gray-200 rounded-lg p-4 shadow-md"
+              >
+                <div className="font-semibold text-lg">
+                  {address.addresstitle}
+                </div>
+                <div className="text-gray-600">{address.street}</div>
+                <div className="text-gray-600">
+                  {address.city}, {address.state}
+                </div>
+                <div className="mt-4 flex space-x-2">
+                  <button
+                    onClick={() => deleteAddressMutation.mutate(address.id)}
+                    className="bg-red-500 text-white py-1 px-3 rounded"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={() => {
+                      // Edit address logic can go here
+                    }}
+                    className="bg-yellow-500 text-white py-1 px-3 rounded"
+                  >
+                    Update
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

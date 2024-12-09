@@ -7,7 +7,7 @@ import { queryClient } from "..";
 
 const Notification = () => {
   const token = localStorage.getItem("authtoken");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   queryClient.invalidateQueries({
     queryKey: ["notificationStatus"],

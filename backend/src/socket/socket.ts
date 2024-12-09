@@ -45,10 +45,8 @@ export const setSocket = (httpServer: any) => {
       io.to(data.room).emit("notification", { message: data.message });
       await Notification.create({
         message: data.message,
-        // receiver_id: parseInt(data.room),
         room_id: data.room,
       });
     });
   });
-  console.log("hello");
 };

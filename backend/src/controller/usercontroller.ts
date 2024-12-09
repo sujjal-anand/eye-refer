@@ -917,3 +917,6 @@ export const checknotificationstatus = async (req: any, res: any) => {
     res.status(500).json({ status: "error", message: "Internal server error" });
   }
 };
+export const deleteaddress = async (req: any, res: any) => {
+  const id = req.params;
+};
