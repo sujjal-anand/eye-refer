@@ -38,6 +38,7 @@ import {
   csvdownload,
   getallnotification,
   checknotificationstatus,
+  deleteaddress,
   // updateproduct,
   // getAencyDetails,
 } from "../controller/usercontroller";
@@ -75,6 +76,7 @@ userRoutes.put(
   updatedoctor
 );
 userRoutes.post("/addaddress", JWT, addaddress);
+userRoutes.delete("/deletestaff/:id", deleteaddress);
 userRoutes.post("/addstaff", JWT, addstaff);
 userRoutes.get("/getstaff", JWT, getstaff);
 userRoutes.delete("/deletestaff/:id", deletestaff);
