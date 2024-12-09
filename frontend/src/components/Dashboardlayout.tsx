@@ -12,6 +12,7 @@ import {
   MdOutlineNotificationsActive,
   MdOutlinePersonalInjury,
 } from "react-icons/md";
+import { IoMdNotificationsOutline } from "react-icons/io";
 import { FaStethoscope } from "react-icons/fa";
 import { GrGroup } from "react-icons/gr";
 import { MdMarkChatRead } from "react-icons/md";
@@ -65,7 +66,7 @@ const DashboardLayout = () => {
     queryFn: fetchNotificationStatus,
     enabled: !!token,
   });
-
+  console.log(notificationStatus);
   // Query for doctor details
   const { data, isLoading, isError } = useQuery({
     queryKey: ["doctorDetail"],
@@ -165,43 +166,43 @@ const DashboardLayout = () => {
           </div>
 
           {/* Notification Icon */}
-          <div className="flex items-center ml-[800px]">
+          <div className="flex items-center ml-[800px] relative">
             {statusLoader ? (
-              // Optional spinner or loading indicator can be placed here
+              // Loading indicator while the status is being fetched
               <div>Loading notifications...</div>
-            ) : notificationStatus?.status === "green" ? (
-              <MdOutlineNotificationsActive
-                className="text-green-500 text-4xl"
-                onClick={async () => {
-                  // Perform the API call
-                  await axios.put(
-                    "http://localhost:5001/users/getallnotification",
-                    {},
-                    {
-                      headers: {
-                        Authorization: `Bearer ${token}`,
-                      },
-                    }
-                  );
-                  queryClient.invalidateQueries({
-                    queryKey: ["notificationStatus"],
-                  });
-                  // Navigate to the notification page
-                  navigate("/app/notification");
-
-                  // Invalidate the notification status query
-                }}
-              />
             ) : (
-              <MdOutlineNotificationsActive
-                className="text-red-500 text-4xl"
-                onClick={() => {
-                  navigate("/app/notification"); // Navigate to the notification page
-                  queryClient.invalidateQueries({
-                    queryKey: ["notificationStatus"],
-                  }); // Invalidate the notification status query
-                }}
-              />
+              <>
+                <IoMdNotificationsOutline
+                  className="text-4xl cursor-pointer"
+                  onClick={async () => {
+                    // Perform the API call to mark notifications as seen
+                    await axios.put(
+                      "http://localhost:5001/users/getallnotification",
+                      {},
+                      {
+                        headers: {
+                          Authorization: `Bearer ${token}`,
+                        },
+                      }
+                    );
+                    // Invalidate the notification status query
+                    queryClient.invalidateQueries({
+                      queryKey: ["notificationStatus"],
+                    });
+
+                    // Navigate to the notification page
+                    navigate("/app/notification");
+                  }}
+                />
+                {notificationStatus?.unreadCount > 0 && (
+                  <div
+                    className="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+                    style={{ transform: "translate(50%, -50%)" }}
+                  >
+                    {notificationStatus.unreadCount}
+                  </div>
+                )}
+              </>
             )}
           </div>
 

@@ -896,7 +896,7 @@ export const checknotificationstatus = async (req: any, res: any) => {
   try {
     const id = req?.user?.id;
 
-    // Check if there are any notifications with seen = 'No'
+    // Count notifications with seen = 'No'
     const unseenCount = await Notification.count({
       where: { room_id: id, seen: "No" },
     });
@@ -907,7 +907,11 @@ export const checknotificationstatus = async (req: any, res: any) => {
         ? "You have unread notifications."
         : "All notifications are seen.";
 
-    res.status(200).json({ status, message });
+    res.status(200).json({
+      status,
+      message,
+      unreadCount: unseenCount, // Add unread count to the response
+    });
   } catch (error) {
     console.error("Error checking notification status:", error);
     res.status(500).json({ status: "error", message: "Internal server error" });
