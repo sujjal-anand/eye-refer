@@ -52,7 +52,7 @@ const Patients = () => {
   return (
     <div
       className="p-6 dashboard bg-secondary-subtle"
-      style={{ marginLeft: "15rem", height: "100vh" }}
+      style={{ marginLeft: "15rem", height: "100%" }}
     >
       <div
         className="heading mb-4 flex items-center justify-between"

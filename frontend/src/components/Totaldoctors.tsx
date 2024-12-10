@@ -95,13 +95,13 @@ const Doctors = () => {
       </div>
 
       {doctors.length > 0 ? (
-        <div className="w-[78%] relative left-[-13px] bg-white shadow-lg rounded-lg p-8 ml-[250px] mr-4 font-normal text-sm leading-[1.43] tracking-[0.01071em] table-cell align-middle">
+        <div className="w-[78%] relative left-[-13px] bg-white shadow-lg rounded-lg p-3 ml-[250px] mr-4 font-normal text-sm leading-[1.43] tracking-[0.01071em] table-cell align-middle">
           <div className="overflow-x-auto">
             <table className="w-full bg-white text-center rounded border-collapse mb-2">
-              <thead className=" text-nowrap">
+              <thead className=" text-nowrap border-b">
                 <tr className="bg-white">
-                  <th className=" px-3 text-left font-semibold text-gray-700 w-2/6">
-                    Name
+                  <th className=" px-3 text-left font-semibold text-gray-700 w-2/6 ">
+                    Doctor Name
                   </th>
                   <th className="py-1 px-3 text-left font-semibold text-gray-700 w-1/6">
                     Referral Placed
@@ -129,22 +129,22 @@ const Doctors = () => {
               <tbody>
                 {doctors.map((doctor: any) => (
                   <tr key={doctor.id} className="border-b hover:bg-gray-50">
-                    <td className="py-1 px-1">
+                    <td className="py-2 px-4 whitespace-nowrap">
                       Dr. {doctor.firstname} {doctor.lastname}
                     </td>
-                    <td className="py-3 px-6">{doctor.referralPlaced || 0}</td>
-                    <td className="py-3 px-6">
+                    <td className="py-2 px-4">{doctor.referralPlaced || 0}</td>
+                    <td className="py-2 px-4">
                       {doctor.referralCompleted || 0}
                     </td>
-                    <td className="py-3 px-6">
+                    <td className="py-2 px-4">
                       {doctor.avgTimeContact || "-"}
                     </td>
-                    <td className="py-3 px-6">
+                    <td className="py-2 px-4">
                       {doctor.avgTimeConsult || "-"}
                     </td>
-                    <td className="py-3 px-6">{doctor.phone || "N/A"}</td>
-                    <td className="py-3 px-6">{doctor.email}</td>
-                    <td className="py-3 px-6">{doctor.doctortype}</td>
+                    <td className="py-2 px-4">{doctor.phone || "N/A"}</td>
+                    <td className="py-2 px-4">{doctor.email}</td>
+                    <td className="py-2 px-4">{doctor.doctortype}</td>
                   </tr>
                 ))}
               </tbody>
