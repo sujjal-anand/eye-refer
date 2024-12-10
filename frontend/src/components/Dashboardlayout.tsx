@@ -17,6 +17,8 @@ import { FaStethoscope } from "react-icons/fa";
 import { GrGroup } from "react-icons/gr";
 import { MdMarkChatRead } from "react-icons/md";
 import { queryClient } from "..";
+import { socket } from "../utils/socketconnection";
+import { toast, ToastContainer } from "react-toastify";
 
 const DashboardLayout = () => {
   const navigate = useNavigate();
@@ -73,6 +75,32 @@ const DashboardLayout = () => {
     queryFn: fetchDoctorData,
     enabled: !!token,
   });
+
+  useEffect(() => {
+    socket.emit("joinnotification", {
+      id: data?.doctor?.id,
+    });
+    console.log(socket.id);
+  }, [data?.doctor?.id]);
+
+  useEffect(() => {
+    const handleNotification = (data: any) => {
+      if (data?.message) {
+        console.log(data?.message);
+        queryClient.invalidateQueries({
+          queryKey: ["notificationStatus"],
+        });
+      } else {
+        console.warn("Received notification without message:", data);
+      }
+    };
+
+    socket.on("notification", handleNotification);
+
+    return () => {
+      socket.off("notification", handleNotification);
+    };
+  }, [socket]);
 
   // Handle loading states and errors
   if (statusLoader || isLoading) {

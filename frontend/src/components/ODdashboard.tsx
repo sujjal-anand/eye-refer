@@ -77,33 +77,6 @@ const ODdashboard = () => {
   });
   const docid = data?.doctor?.id;
 
-  useEffect(() => {
-    socket.emit("joinnotification", {
-      id: docid,
-    });
-    console.log(socket.id);
-  }, [docid]);
-
-  useEffect(() => {
-    const handleNotification = (data: any) => {
-      if (data?.message) {
-        console.log(data?.message);
-        toast.success(data?.message);
-        queryClient.invalidateQueries({
-          queryKey: ["notificationStatus"],
-        });
-      } else {
-        console.warn("Received notification without message:", data);
-      }
-    };
-
-    socket.on("notification", handleNotification);
-
-    return () => {
-      socket.off("notification", handleNotification);
-    };
-  }, [socket]);
-
   // console.log("<<<<<", data?.doctor?.id);
   if (isLoading) return <div className="text-center py-4">Loading...</div>;
   if (isError)
