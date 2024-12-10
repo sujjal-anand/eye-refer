@@ -49,7 +49,7 @@ const Doctors = () => {
   console.log(doctors);
   return (
     <div
-      className="min-h-screen bg-gray-50 py-10 flex flex-col items-center"
+      className="min-h-screen bg-secondary-subtle py-10 flex flex-col items-center "
       style={{ marginLeft: "35px" }}
     >
       {/* Container for heading and search input */}
@@ -100,28 +100,28 @@ const Doctors = () => {
             <table className="w-full bg-white text-center rounded border-collapse mb-2">
               <thead className=" text-nowrap border-b">
                 <tr className="bg-white">
-                  <th className=" px-3 text-left font-semibold text-gray-700 w-2/6 ">
+                  <th className=" px-3  font-semibold text-gray-700 w-2/6 ">
                     Doctor Name
                   </th>
-                  <th className="py-1 px-3 text-left font-semibold text-gray-700 w-1/6">
+                  <th className="py-1 px-3  font-semibold text-gray-700 w-1/6">
                     Referral Placed
                   </th>
-                  <th className="py-1 px-3 text-left font-semibold text-gray-700 w-1/6">
+                  <th className="py-1 px-3  font-semibold text-gray-700 w-1/6">
                     Referral Completed
                   </th>
-                  <th className="py-1 px-3 text-left font-semibold text-gray-700 w-1/6">
+                  <th className="py-1 px-3  font-semibold text-gray-700 w-1/6">
                     Avg Time of Contact (mins)
                   </th>
-                  <th className="py-1 px-3 text-left font-semibold text-gray-700 w-1/6">
+                  <th className="py-1 px-3 font-semibold text-gray-700 w-1/6">
                     Avg Time of Consult (mins)
                   </th>
-                  <th className="py-1 px-3 text-left font-semibold text-gray-700 w-1/6">
+                  <th className="py-1 px-3  font-semibold text-gray-700 w-1/6">
                     Phone
                   </th>
-                  <th className="py-1 px-3 text-left font-semibold text-gray-700 w-2/6">
+                  <th className="py-1 px-3  font-semibold text-gray-700 w-2/6">
                     Email
                   </th>
-                  <th className="py-1 px-3 text-left font-semibold text-gray-700 w-1/6">
+                  <th className="py-1 px-3  font-semibold text-gray-700 w-1/6">
                     Doctor Type
                   </th>
                 </tr>

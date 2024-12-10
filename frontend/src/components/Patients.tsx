@@ -134,7 +134,7 @@ const Patients = () => {
                       {patient.referredtoname}
                     </td>
                     <td className="px-4 py-2 text-left text-gray-800 capitalize whitespace-nowrap">
-                      {patient.consultationdate || "-"}
+                      {patient.consulatationdate || "-"}
                     </td>
                     <td className="px-4 py-2 text-left text-gray-800 capitalize whitespace-nowrap">
                       {patient.surgerydate || "-"}

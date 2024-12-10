@@ -111,8 +111,8 @@ const ODdashboard = () => {
 
   return (
     <div
-      className="p-6 bg-gray-100"
-      style={{ marginLeft: "15.5rem", marginTop: "13px", height: "100vh" }}
+      className="p-6 bg-secondary-subtle"
+      style={{ marginLeft: "15.5rem", marginTop: "13px", height: "100%" }}
     >
       <ToastContainer />
 

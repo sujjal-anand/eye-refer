@@ -9,7 +9,7 @@ const Patientsreceived = () => {
   const token = localStorage.getItem("authtoken");
 
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 1; // Number of rows per page
+  const pageSize = 10; // Number of rows per page
 
   const fetchReferredReceived = async () => {
     const response = await axios.get(

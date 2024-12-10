@@ -107,7 +107,7 @@ const Staff = () => {
   });
 
   return (
-    <div>
+    <div className="bg-grey-50 container-fluid ">
       {/* Download CSV Button */}
       <button
         className="btn btn-outline-info"
