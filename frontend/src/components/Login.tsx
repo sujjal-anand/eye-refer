@@ -71,7 +71,14 @@ const Login = () => {
             }}
           >
             {({ handleSubmit }) => (
-              <Form onSubmit={handleSubmit}>
+              <Form
+                onSubmit={handleSubmit}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSubmit();
+                  }
+                }}
+              >
                 <div className="mb-4">
                   <label htmlFor="email" className="block font-semibold">
                     User email <span className="text-red-500 text-xl">*</span>
@@ -109,6 +116,7 @@ const Login = () => {
                 <button
                   className="text-teal-500 hover:underline ml-1 translate-x-64"
                   onClick={() => navigate("/forgotpassword")}
+                  type="button"
                 >
                   Forgot Password
                 </button>
@@ -119,7 +127,7 @@ const Login = () => {
                     className={`w-full py-2 rounded text-white transition ${
                       loading
                         ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-teal-500 hover:bg-teal-600"
+                        : "bg-[#34aadc] hover:bg-[#2c91c8]"
                     }`}
                     disabled={loading} // Disable button while loading
                   >
@@ -129,7 +137,7 @@ const Login = () => {
                         Loading...
                       </span>
                     ) : (
-                      "Sign In"
+                      "Login"
                     )}
                   </button>
                 </div>

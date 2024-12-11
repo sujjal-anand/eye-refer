@@ -228,7 +228,7 @@ const Signup = () => {
                 <div className="text-center">
                   <button
                     type="submit"
-                    className="w-full bg-teal-500 text-white py-2 rounded hover:bg-teal-600 transition"
+                    className="w-full bg-[#34aadc]  text-white py-2 rounded hover:bg-teal-600 transition"
                   >
                     {loading ? (
                       <span className="loader">Loading...</span>

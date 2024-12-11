@@ -1,13 +1,14 @@
+import React, { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import React, { useState } from "react";
 import * as Yup from "yup"; // Import Yup for validation
 import "./staff.css";
 import { Local } from "../env/config";
 
 const Staff = () => {
   const [modal, setModal] = useState(false);
+  const [selectedStaff, setSelectedStaff] = useState<number[]>([]); // Track selected staff
   const token = localStorage.getItem("authtoken");
 
   // Mutation for adding staff
@@ -47,6 +48,7 @@ const Staff = () => {
     },
     onSuccess: () => {
       refetch();
+      setSelectedStaff([]); // Clear selection after deletion
     },
   });
 
@@ -63,26 +65,18 @@ const Staff = () => {
     },
   });
 
-  // Function to download CSV
-  const downloadCSV = async () => {
-    try {
-      const response = await axios.get("http://localhost:5001/users/staffcsv", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        responseType: "blob", // Ensure the response is treated as binary
-      });
+  // Handle checkbox changes
+  const handleCheckboxChange = (id: number) => {
+    setSelectedStaff((prev) =>
+      prev.includes(id)
+        ? prev.filter((staffId) => staffId !== id)
+        : [...prev, id]
+    );
+  };
 
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute("download", "stafflist.csv"); // Set filename
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link); // Clean up
-    } catch (error) {
-      console.error("Error downloading CSV", error);
-    }
+  // Handle delete selected
+  const handleDeleteSelected = () => {
+    selectedStaff.forEach((id) => deleteStaff.mutate(id));
   };
 
   if (isLoading) return <div>Loading staff data...</div>;
@@ -108,18 +102,9 @@ const Staff = () => {
 
   return (
     <div
-      className="bg-secondary-subtle container-fluid "
+      className="bg-secondary-subtle container-fluid"
       style={{ height: "100vh" }}
     >
-      {/* Download CSV Button */}
-      <button
-        className="btn btn-outline-info"
-        style={{ margin: "41px -395px -117px 285px" }}
-        onClick={downloadCSV}
-      >
-        Download CSV
-      </button>
-
       {/* Add Staff Button */}
       <div className="add">
         <button
@@ -129,6 +114,14 @@ const Staff = () => {
         >
           Add Staff
         </button>
+        <button
+          type="button"
+          onClick={handleDeleteSelected}
+          className="btn btn-danger mx-3"
+          disabled={selectedStaff.length === 0}
+        >
+          Save
+        </button>
       </div>
 
       {/* Staff Table */}
@@ -136,33 +129,41 @@ const Staff = () => {
         <table className="table table-bordered">
           <thead>
             <tr>
+              <th>
+                <input
+                  type="checkbox"
+                  onChange={(e) =>
+                    setSelectedStaff(
+                      e.target.checked ? data.map((staff: any) => staff.id) : []
+                    )
+                  }
+                  checked={selectedStaff.length === data?.length}
+                />
+              </th>
               <th>#</th>
               <th>First Name</th>
               <th>Last Name</th>
               <th>Email</th>
               <th>Gender</th>
               <th>Phone Number</th>
-              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {data?.map((staff: any, index: number) => (
               <tr key={staff.id}>
+                <td>
+                  <input
+                    type="checkbox"
+                    checked={selectedStaff.includes(staff.id)}
+                    onChange={() => handleCheckboxChange(staff.id)}
+                  />
+                </td>
                 <td>{index + 1}</td>
                 <td>{staff.firstname}</td>
                 <td>{staff.lastname}</td>
                 <td>{staff.email}</td>
                 <td>{staff.gender}</td>
                 <td>{staff.phoneno}</td>
-                <td>
-                  <button
-                    type="button"
-                    className="btn btn-danger"
-                    onClick={() => deleteStaff.mutate(staff.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
               </tr>
             ))}
           </tbody>
@@ -171,22 +172,14 @@ const Staff = () => {
 
       {/* Add Staff Modal */}
       {modal && (
-        <div
-          className="modal fade show d-block"
-          id="exampleModal"
-          aria-labelledby="exampleModalLabel"
-          aria-hidden="true"
-        >
+        <div className="modal fade show d-block">
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalLabel">
-                  Add Staff
-                </h5>
+                <h5 className="modal-title">Add Staff</h5>
                 <button
                   type="button"
                   className="btn-close"
-                  aria-label="Close"
                   onClick={() => setModal(false)}
                 ></button>
               </div>
@@ -205,6 +198,7 @@ const Staff = () => {
                   }}
                 >
                   <Form>
+                    {/* Form Fields */}
                     <div className="mb-3">
                       <label>First Name</label>
                       <Field
@@ -218,7 +212,6 @@ const Staff = () => {
                         className="text-danger"
                       />
                     </div>
-
                     <div className="mb-3">
                       <label>Last Name</label>
                       <Field
@@ -232,7 +225,6 @@ const Staff = () => {
                         className="text-danger"
                       />
                     </div>
-
                     <div className="mb-3">
                       <label>Email</label>
                       <Field
@@ -247,7 +239,6 @@ const Staff = () => {
                         className="text-danger"
                       />
                     </div>
-
                     <div className="mb-3">
                       <label>Gender</label>
                       <Field as="select" name="gender" className="form-control">
@@ -256,7 +247,6 @@ const Staff = () => {
                         <option value="other">Other</option>
                       </Field>
                     </div>
-
                     <div className="mb-3">
                       <label>Phone Number</label>
                       <Field
@@ -270,7 +260,6 @@ const Staff = () => {
                         className="text-danger"
                       />
                     </div>
-
                     <button type="submit" className="btn btn-success">
                       Submit
                     </button>
