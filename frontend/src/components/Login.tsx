@@ -24,29 +24,30 @@ const Login = () => {
     password: Yup.string().required("Password is required"),
   });
 
+  // Optimized API call with response handling
   const postdata = async (values: any) => {
-    setLoading(true); // Start loading
+    setLoading(true); // Start loading spinner
     try {
       const response = await axios.post(
         `${Local.BASE_URL}/${Local.LOGIN_DOCTOR}`,
         values
       );
 
+      // Show success toast
       toast.success("Login successful");
       localStorage.setItem("authtoken", response.data.token);
 
-      setTimeout(() => {
-        if (response?.data?.user?.doctortype === "OD") {
-          navigate("/app/od");
-        } else {
-          navigate("/app/md");
-        }
-      }, 3000); // Simulate a delay for 3 seconds
+      // Handle navigation based on the response
+      if (response?.data?.user?.doctortype === "OD") {
+        navigate("/app/od", { replace: true }); // Navigate to OD dashboard
+      } else {
+        navigate("/app/md", { replace: true }); // Navigate to MD dashboard
+      }
     } catch (error) {
       console.error("Error during login:", error);
       toast.error("Invalid credentials, please try again");
     } finally {
-      setTimeout(() => setLoading(false), 3000); // End loading after 3 seconds
+      setLoading(false); // End loading spinner immediately
     }
   };
 

@@ -62,7 +62,7 @@ const Patients = () => {
           Referral Patients
         </h2>
         <button
-          className="ml-auto w-[237px] h-[48px] rounded-md text-white font-semibold text-lg relative bg-[#3498db] flex items-center justify-center gap-2"
+          className="ml-auto w-[237px] h-[48px] rounded-md text-white font-semibold text-lg relative bg-[#35C0E4] hover:bg-[#2BAFD0] flex items-center justify-center gap-2"
           onClick={() => {
             navigate("/app/addreferpatient");
           }}
@@ -82,7 +82,7 @@ const Patients = () => {
           />
           <button
             type="submit"
-            className="ml-4 w-[131px] h-[48px] px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 flex items-center justify-center space-x-2"
+            className="ml-4 w-[131px] h-[48px] px-4 py-2 bg-[#35C0E4] text-white rounded-md hover:bg-[#2BAFD0] flex items-center justify-center space-x-2"
             onClick={() => setSearch(input)}
           >
             <FaSearch size={20} /> {/* Adds the FaSearch icon */}

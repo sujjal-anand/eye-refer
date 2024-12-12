@@ -214,7 +214,7 @@ const ODdashboard = () => {
       <div className="flex items-center justify-between mb-4">
         <p className="text-xl font-semibold">Referral Patient</p>
         <button
-          className="bg-blue-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-[#35C0E4] hover:bg-[#2BAFD0] text-white font-bold py-2 px-4 rounded"
           onClick={() => {
             navigate("/app/addreferpatient");
           }}

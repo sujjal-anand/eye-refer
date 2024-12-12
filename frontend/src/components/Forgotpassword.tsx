@@ -19,6 +19,7 @@ const Logo = () => (
 const ForgotPasswordForm = () => {
   const [otpSent, setOtpSent] = useState(false);
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false); // State for handling loader visibility
   const navigate = useNavigate();
 
   // Validation Schema for Email
@@ -43,6 +44,7 @@ const ForgotPasswordForm = () => {
 
   // Function to handle email submission
   const handleEmailSubmit = async (values: any) => {
+    setLoading(true); // Show the loader when request starts
     try {
       const response = await axios.post(
         `${Local.BASE_URL}/${Local.FORGOT_PASSWORD}`,
@@ -58,6 +60,8 @@ const ForgotPasswordForm = () => {
     } catch (error) {
       console.error("Error sending OTP:", error);
       toast.error("Error sending OTP, please try again.");
+    } finally {
+      setLoading(false); // Hide the loader once the request finishes
     }
   };
 
@@ -140,9 +144,17 @@ const ForgotPasswordForm = () => {
 
                   <button
                     type="submit"
-                    className="w-full bg-teal-500 text-white py-2 rounded hover:bg-teal-600 transition"
+                    className="w-full bg-[#35C0E4] text-white py-2 rounded hover:bg-[#2BAFD0] transition"
+                    disabled={loading} // Disable button while loading
                   >
-                    Send OTP
+                    {loading ? (
+                      <div className="flex justify-center items-center space-x-2">
+                        <div className="w-4 h-4 border-4 border-t-transparent border-teal-500 rounded-full animate-spin"></div>
+                        <span>Sending OTP...</span>
+                      </div>
+                    ) : (
+                      "Send OTP"
+                    )}
                   </button>
                 </Form>
               )}
@@ -216,7 +228,7 @@ const ForgotPasswordForm = () => {
 
                   <button
                     type="submit"
-                    className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition"
+                    className="w-full bg-[#35C0E4] text-white py-2 rounded hover:bg-[#2BAFD0] transition"
                   >
                     Reset Password
                   </button>

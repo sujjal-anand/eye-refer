@@ -86,7 +86,7 @@ const Doctors = () => {
           <button
             type="submit"
             onClick={() => setSearch(input)}
-            className="ml-2 px-4 py-2 bg-blue-500 text-white rounded"
+            className="ml-2 px-4 py-2 bg-[#35C0E4] hover:bg-[#2BAFD0] text-white rounded"
             style={{ height: "35px" }}
           >
             Search

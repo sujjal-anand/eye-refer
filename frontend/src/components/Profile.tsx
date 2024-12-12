@@ -36,11 +36,7 @@ const Profile = () => {
       const response = await axios.put(
         `${Local.BASE_URL}/${Local.UPDATE_DOCTOR}`,
         values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       queryClient.invalidateQueries();
       queryClient.invalidateQueries({ queryKey: ["doctorDetail"] });
@@ -53,11 +49,7 @@ const Profile = () => {
     queryFn: async () => {
       const data = await axios.get(
         `${Local.BASE_URL}/${Local.DOCTOR_DETAILS}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       return data?.data;
     },
@@ -68,12 +60,9 @@ const Profile = () => {
     queryFn: async () => {
       const response = await axios.get(
         `${Local.BASE_URL}/${Local.GET_ADDRESS}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
+      console.log(response?.data);
       return response?.data;
     },
   });
@@ -85,49 +74,44 @@ const Profile = () => {
       const response = await axios.post(
         `${Local.BASE_URL}/${Local.ADD_ADDRESS}`,
         values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
+      queryClient.invalidateQueries();
       console.log("Address Update Response:", response);
     },
   });
-  console.log(Local.DELETE_ADDRESS);
+
   const deleteAddressMutation = useMutation({
     mutationKey: ["deleteAddress"],
-    mutationFn: async (addressId: number) => {
+    mutationFn: async (addressId: any) => {
       const response = await axios.delete(
         `${Local.BASE_URL}/${Local.DELETE_ADDRESS}/${addressId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      queryClient.invalidateQueries({ queryKey: ["getaddresses"] });
       console.log("Address Deleted Response:", response);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries();
     },
   });
 
   if (isLoading) {
     return <div>....loading</div>;
   }
+
   return (
     <div className="min-h-screen bg-secondary-subtle flex items-center justify-center">
       <h2
         className="mb-auto"
-        style={{
-          position: "relative",
-          left: "107px",
-          top: "48px",
-        }}
+        style={{ position: "relative", left: "107px", top: "48px" }}
       >
         Profile
       </h2>
       {/* White Box Container */}
-      <div className="bg-white shadow-lg rounded-lg p-8 max-w-5xl my-5">
+      <div
+        className="bg-white shadow-lg rounded-lg p-8 max-w-5xl"
+        style={{ marginTop: "134px" }}
+      >
         {/* Main Content */}
         <div className="p-6 flex flex-col items-center justify-center space-y-4">
           {/* Profile Section */}
@@ -139,25 +123,27 @@ const Profile = () => {
                 alt="User Profile"
                 className="h-32 w-32 rounded-full border-2 border-teal-500 cursor-pointer"
               />
-              <div>
+              <div style={{ position: "relative", right: "234px", top: "7px" }}>
                 <p className="text-xl font-bold">
                   {data?.doctor?.firstname} {data?.doctor?.lastname}
                 </p>
               </div>
             </div>
-
             {/* Edit Profile Button */}
             <button
               type="button"
-              className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mt-2"
+              style={{ backgroundColor: "#35C0E4" }}
+              className="hover:bg-blue-600 text-white py-2 px-4 rounded mt-2"
               onClick={() => setdoctormodal(true)}
             >
               Edit Profile
             </button>
           </div>
-
           {/* Displaying Doctor Details */}
-          <div className="mt-4 p-4 bg-gray-100 border border-gray-300 rounded-md">
+          <div
+            className="mt-4 p-4 bg-gray-100 border border-gray-300 rounded-md"
+            style={{ width: "756px" }}
+          >
             <div className="row">
               <p className="col">
                 <strong>Name:</strong> {data?.doctor?.firstname}{" "}
@@ -167,7 +153,6 @@ const Profile = () => {
                 <strong>Phone:</strong> {data?.doctor?.phoneno}
               </p>
             </div>
-
             <div className="row">
               <p className="col">
                 <strong>Gender:</strong> {data?.doctor?.gender}
@@ -177,15 +162,10 @@ const Profile = () => {
               </p>
             </div>
           </div>
-
           {/* Doctor Profile Form */}
           {doctormodal && (
             <Formik
-              initialValues={{
-                phoneno: "",
-                gender: "",
-                profilephoto: "",
-              }}
+              initialValues={{ phoneno: "", gender: "", profilephoto: "" }}
               validationSchema={doctorValidationSchema}
               onSubmit={(values) => {
                 const formdata = new FormData();
@@ -221,7 +201,6 @@ const Profile = () => {
                           className="text-red-500 text-sm"
                           component="div"
                         />
-
                         <Field
                           as="select"
                           name="gender"
@@ -236,11 +215,10 @@ const Profile = () => {
                           className="text-red-500 text-sm"
                           component="div"
                         />
-
                         <input
                           type="file"
                           name="profilephoto"
-                          onChange={(e: any) => setphoto(e.target.files?.[0])}
+                          onChange={(e) => setphoto(e.target.files?.[0])}
                           className="block w-full p-2 border rounded"
                         />
                       </div>
@@ -265,11 +243,17 @@ const Profile = () => {
               )}
             </Formik>
           )}
-
           {/* Address Form Button */}
           <button
             type="button"
-            className="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded translate-x-64 translate-y-4"
+            style={{ backgroundColor: "#35C0E4" }}
+            className="text-white py-2 px-4 rounded translate-x-64 translate-y-4"
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.backgroundColor = "#2BAFD0")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.backgroundColor = "#35C0E4")
+            }
             onClick={() => setaddressmodal(true)}
           >
             Add Address
@@ -292,6 +276,7 @@ const Profile = () => {
               onSubmit={(values) => {
                 updateAddressMutation.mutate(values);
                 setaddressmodal(false);
+                queryClient.invalidateQueries({ queryKey: ["getaddresses"] });
               }}
             >
               <Form>
@@ -303,95 +288,34 @@ const Profile = () => {
                         &times;
                       </button>
                     </div>
-
                     <div className="space-y-4">
-                      <Field
-                        name="addresstitle"
-                        placeholder="Address Title"
-                        className="form-control block w-full p-2 border rounded"
-                      />
-                      <ErrorMessage
-                        name="addresstitle"
-                        className="text-red-500 text-sm"
-                        component="div"
-                      />
-
-                      <Field
-                        name="officenumber"
-                        placeholder="Office Number"
-                        className="form-control block w-full p-2 border rounded"
-                      />
-                      <ErrorMessage
-                        name="officenumber"
-                        className="text-red-500 text-sm"
-                        component="div"
-                      />
-
-                      <Field
-                        name="faxno"
-                        placeholder="Fax Number"
-                        className="form-control block w-full p-2 border rounded"
-                      />
-                      <ErrorMessage
-                        name="faxno"
-                        className="text-red-500 text-sm"
-                        component="div"
-                      />
-
-                      <Field
-                        name="street"
-                        placeholder="Street"
-                        className="form-control block w-full p-2 border rounded"
-                      />
-                      <ErrorMessage
-                        name="street"
-                        className="text-red-500 text-sm"
-                        component="div"
-                      />
-
-                      <Field
-                        name="city"
-                        placeholder="City"
-                        className="form-control block w-full p-2 border rounded"
-                      />
-                      <ErrorMessage
-                        name="city"
-                        className="text-red-500 text-sm"
-                        component="div"
-                      />
-
-                      <Field
-                        name="state"
-                        placeholder="State"
-                        className="form-control block w-full p-2 border rounded"
-                      />
-                      <ErrorMessage
-                        name="state"
-                        className="text-red-500 text-sm"
-                        component="div"
-                      />
-
-                      <Field
-                        name="country"
-                        placeholder="Country"
-                        className="form-control block w-full p-2 border rounded"
-                      />
-                      <ErrorMessage
-                        name="country"
-                        className="text-red-500 text-sm"
-                        component="div"
-                      />
-
-                      <Field
-                        name="zip"
-                        placeholder="Zip Code"
-                        className="form-control block w-full p-2 border rounded"
-                      />
-                      <ErrorMessage
-                        name="zip"
-                        className="text-red-500 text-sm"
-                        component="div"
-                      />
+                      {/* Address Fields */}
+                      {[
+                        "addresstitle",
+                        "officenumber",
+                        "faxno",
+                        "street",
+                        "city",
+                        "state",
+                        "country",
+                        "zip",
+                      ].map((field) => (
+                        <>
+                          <Field
+                            key={field}
+                            name={field}
+                            placeholder={
+                              field.charAt(0).toUpperCase() + field.slice(1)
+                            }
+                            className="form-control block w-full p-2 border rounded"
+                          />
+                          <ErrorMessage
+                            name={field}
+                            className="text-red-500 text-sm"
+                            component="div"
+                          />
+                        </>
+                      ))}
                     </div>
                     <div className="flex justify-end mt-6">
                       <button
@@ -413,28 +337,39 @@ const Profile = () => {
               </Form>
             </Formik>
           )}
+
           {/* Address Section */}
           <div className="mt-4 w-full">
             <h3 className="text-lg font-bold mb-2">Address List</h3>
-            {getaddresses?.map((address: any, index: any) => (
-              <div
-                key={index}
-                className="p-4 border rounded mb-2 bg-gray-100 flex justify-between items-center"
-              >
-                <div>
-                  <p>
-                    <strong>{address.addresstitle}</strong>
-                  </p>
-                  <p>
-                    {address.street}, {address.city}, {address.state},{" "}
-                    {address.country} - {address.zip}
-                  </p>
-                  <p>
-                    Office: {address.officenumber}, Fax: {address.faxno}
-                  </p>
+            {getaddresses && getaddresses.length > 0 ? (
+              getaddresses.map((address: any, index: any) => (
+                <div
+                  key={index}
+                  className="p-4 border rounded mb-2 bg-gray-100 flex justify-between items-center"
+                >
+                  <div>
+                    <p>
+                      <strong>{address.addresstitle}</strong>
+                    </p>
+                    <p>
+                      {address.street}, {address.city}, {address.state},{" "}
+                      {address.country} - {address.zip}
+                    </p>
+                    <p>
+                      Office: {address.officenumber}, Fax: {address.faxno}
+                    </p>
+                    <button
+                      onClick={() => deleteAddressMutation.mutate(address.id)}
+                      className="bg-[#35C0E4] text-white font-semibold py-2 px-4 rounded-md hover:bg-[#28a0c0] focus:outline-none focus:ring-2 focus:ring-[#35C0E4] transition duration-200"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-gray-500">No Address Found</p>
+            )}
           </div>
         </div>
       </div>

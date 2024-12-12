@@ -541,7 +541,7 @@ export const getaddress = async (req: any, res: any) => {
     });
 
     if (response.length === 0) {
-      return res.status(404).json({ message: "No addresses found" });
+      return res.status(200).json({ message: "No addresses found" });
     }
 
     // Returning the list of addresses
