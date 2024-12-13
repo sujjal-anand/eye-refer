@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -39,6 +39,7 @@ const validationSchema = Yup.object({
 });
 
 const ReferPatientForm = () => {
+  const [address, setaddress] = useState<any>([]);
   queryClient.invalidateQueries();
   const navigate = useNavigate();
   const token = localStorage.getItem("authtoken");
@@ -66,10 +67,25 @@ const ReferPatientForm = () => {
     },
   });
 
+  const fetchAddresses = async (mdid: any) => {
+    try {
+      const response = await axios.post(
+        `${Local.BASE_URL}/${Local.GET_ADDRESS_BY_ID}`,
+        { mdid: mdid }
+      );
+      console.log(response?.data);
+      setaddress(response?.data);
+      console.log("><><", address);
+    } catch (error) {
+      console.error("Error fetching addresses:", error);
+      throw error;
+    }
+  };
+
   if (isLoading) {
     return <p>Loading...</p>;
   }
-
+  // console.log("<><", `${Local.BASE_URL}/${Local.GET_ADDRESS_BY_ID}`);
   return (
     <div className="max-w-3xl mx-auto p-6 border border-gray-300 rounded-lg shadow-lg">
       <button
@@ -137,7 +153,7 @@ const ReferPatientForm = () => {
           setSubmitting(false);
         }}
       >
-        {({ setFieldValue }) => (
+        {({ setFieldValue, values }) => (
           <Form>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-4">
               <div>
@@ -259,24 +275,28 @@ const ReferPatientForm = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block font-medium">MD Name</label>
+              <label className="block font-medium" htmlFor="md_name">
+                MD Name
+              </label>
               <Field
                 as="select"
                 name="md_name"
+                id="md_name" // Added id for better accessibility
                 className="w-full px-4 py-2 border rounded"
+                onChange={(e: any) => {
+                  setFieldValue("md_name", e.target.value);
+                  fetchAddresses(e.target.value);
+                }}
               >
-                <option
-                  value=""
-                  onClick={() => {
-                    queryClient.invalidateQueries({ queryKey: ["todoss"] });
-                  }}
-                >
+                <option value="" disabled>
                   Select
                 </option>
                 {data?.rows?.map((name: any) => (
-                  <option key={name.id} value={name.id}>
-                    {name.firstname} {name.lastname}
-                  </option>
+                  <option
+                    key={name.id}
+                    value={name.id}
+                    label={`${name.firstname} ${name.lastname}`}
+                  />
                 ))}
               </Field>
               <ErrorMessage
@@ -289,9 +309,23 @@ const ReferPatientForm = () => {
             <div className="mb-4">
               <label className="block font-medium">Location</label>
               <Field
+                as="select"
                 name="location"
                 className="w-full px-4 py-2 border rounded"
-              />
+              >
+                <option value="" label="Select a location" />
+                {address && address.length > 0 ? (
+                  address.map((address: any, index: any) => (
+                    <option key={index} value={address.id}>
+                      {address.addresstitle}
+                    </option>
+                  ))
+                ) : (
+                  <option value="" disabled>
+                    No address available
+                  </option>
+                )}
+              </Field>
               <ErrorMessage
                 name="location"
                 component="div"

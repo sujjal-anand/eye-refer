@@ -541,7 +541,7 @@ export const getaddress = async (req: any, res: any) => {
     });
 
     if (response.length === 0) {
-      return res.status(200).json({ message: "No addresses found" });
+      return res.status(201).json({ message: "No addresses found" });
     }
 
     // Returning the list of addresses
@@ -931,5 +931,30 @@ export const deleteaddress = async (req: any, res: any) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error", error });
+  }
+};
+
+export const getaddressbyId = async (req: any, res: any) => {
+  try {
+    const { mdid } = req.body;
+    if (!mdid) {
+      return res.status(400).json({ message: "Doctor ID is required" });
+    }
+
+    const response = await Addresses.findAll({
+      where: { doctorid: mdid },
+    });
+    if (response.length === 0) {
+      return res
+        .status(200)
+        .json({ message: "No address found for the given doctor ID" });
+    }
+
+    res.status(200).json(response);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while fetching the address" });
   }
 };

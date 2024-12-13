@@ -39,6 +39,7 @@ import {
   getallnotification,
   checknotificationstatus,
   deleteaddress,
+  getaddressbyId,
   // updateproduct,
   // getAencyDetails,
 } from "../controller/usercontroller";
@@ -91,5 +92,6 @@ userRoutes.get("/getaddress", JWT, getaddress);
 userRoutes.get("/staffcsv", JWT, csvdownload);
 userRoutes.put("/getallnotification", JWT, getallnotification);
 userRoutes.get("/checknotificationstatus", JWT, checknotificationstatus);
+userRoutes.post("/getaddressbyId", getaddressbyId);
 
 export default userRoutes;
