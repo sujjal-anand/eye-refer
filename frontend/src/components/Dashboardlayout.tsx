@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom"; // Add useLocation
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { FaHome, FaUserMd, FaUserFriends } from "react-icons/fa";
@@ -22,6 +22,7 @@ import { toast, ToastContainer } from "react-toastify";
 
 const DashboardLayout = () => {
   const navigate = useNavigate();
+  const location = useLocation(); // Use the location hook to track the current route
   const [token, setToken] = useState<string | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
@@ -68,7 +69,7 @@ const DashboardLayout = () => {
     queryFn: fetchNotificationStatus,
     enabled: !!token,
   });
-  console.log(notificationStatus);
+
   // Query for doctor details
   const { data, isLoading, isError } = useQuery({
     queryKey: ["doctorDetail"],
@@ -80,7 +81,6 @@ const DashboardLayout = () => {
     socket.emit("joinnotification", {
       id: data?.doctor?.id,
     });
-    console.log(socket.id);
   }, [data?.doctor?.id]);
 
   useEffect(() => {
@@ -135,50 +135,85 @@ const DashboardLayout = () => {
     navigate("/login");
   };
 
+  // Helper function to check if the current link is active
+  const isActiveLink = (path: string) => location.pathname === path;
+
   return (
     <div className="dashboard-layout">
       {/* Sidebar */}
       <div className="sidebar">
         <nav className="sidebar-nav">
           {data?.doctor?.doctortype === "OD" && (
-            <Link to="/app/od" className="nav-link">
+            <Link
+              to="/app/od"
+              className={`nav-link ${isActiveLink("/app/od") ? "active" : ""}`}
+            >
               <GoHome /> <span>Dashboard</span>
             </Link>
           )}
           {data?.doctor?.doctortype === "MD" && (
-            <Link to="/app/md" className="nav-link">
+            <Link
+              to="/app/md"
+              className={`nav-link ${isActiveLink("/app/md") ? "active" : ""}`}
+            >
               <GoHome /> <span>Dashboard</span>
             </Link>
           )}
 
-          <Link to="/app/doctors" className="nav-link">
+          <Link
+            to="/app/doctors"
+            className={`nav-link ${
+              isActiveLink("/app/doctors") ? "active" : ""
+            }`}
+          >
             <FaStethoscope /> <span>Doctors</span>
           </Link>
 
           {data?.doctor?.doctortype === "MD" && (
-            <Link to="/app/patientreceived" className="nav-link">
+            <Link
+              to="/app/patientreceived"
+              className={`nav-link ${
+                isActiveLink("/app/patientreceived") ? "active" : ""
+              }`}
+            >
               <MdOutlinePersonalInjury /> <span>Patients</span>
             </Link>
           )}
           {data?.doctor?.doctortype === "OD" && (
-            <Link to="/app/patients" className="nav-link">
+            <Link
+              to="/app/patients"
+              className={`nav-link ${
+                isActiveLink("/app/patients") ? "active" : ""
+              }`}
+            >
               <MdOutlinePersonalInjury /> <span>Patients</span>
             </Link>
           )}
 
           {/* Conditional Link based on doctor type */}
           {data?.doctor?.doctortype === "MD" && (
-            <Link to="/app/appointmentlist" className="nav-link">
+            <Link
+              to="/app/appointmentlist"
+              className={`nav-link ${
+                isActiveLink("/app/appointmentlist") ? "active" : ""
+              }`}
+            >
               <FaUserMd />
               <span>Appointments</span>
             </Link>
           )}
 
-          <Link to="/app/staff" className="nav-link">
+          <Link
+            to="/app/staff"
+            className={`nav-link ${isActiveLink("/app/staff") ? "active" : ""}`}
+          >
             <GrGroup /> <span>Staff</span>
           </Link>
 
-          <Link to="/app/chat" className="nav-link">
+          <Link
+            to="/app/chat"
+            className={`nav-link ${isActiveLink("/app/chat") ? "active" : ""}`}
+          >
             <MdMarkChatRead /> <span>Chat</span>
           </Link>
         </nav>

@@ -3,6 +3,12 @@
   position: relative;
 }
 
+.nav-link.active {
+  background-color: #90ee90; /* Neon blue background */
+  color: black; /* White text color */
+  box-shadow: 0 0 10px #00f7ff; /* Neon glow effect */
+}
+
 .sidebar {
   width: 250px;
   height: 100vh;
