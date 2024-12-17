@@ -9,6 +9,7 @@ import { Local } from "../env/config";
 const Staff = () => {
   const [modal, setModal] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState<number[]>([]); // Track selected staff
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const token = localStorage.getItem("authtoken");
 
   // Mutation for adding staff
@@ -79,6 +80,18 @@ const Staff = () => {
     selectedStaff.forEach((id) => deleteStaff.mutate(id));
   };
 
+  // Filtered data based on search query
+  const filteredData = data?.filter((staff: any) => {
+    const query = searchQuery.toLowerCase();
+    return (
+      staff.firstname.toLowerCase().includes(query) ||
+      staff.lastname.toLowerCase().includes(query) ||
+      staff.email.toLowerCase().includes(query) ||
+      staff.gender.toLowerCase().includes(query) ||
+      staff.phoneno.includes(query)
+    );
+  });
+
   if (isLoading) return <div>Loading staff data...</div>;
   if (error) return <div>Error loading staff data. Please try again.</div>;
 
@@ -107,26 +120,73 @@ const Staff = () => {
     >
       {/* Add Staff Button */}
       <div className="add">
-        <button
-          type="button"
-          onClick={() => setModal(true)}
-          className="btn btn-primary my-3"
+        <div
+          className="bg-secondary-subtle container-fluid position-relative"
+          style={{ height: "23vh" }}
         >
-          Add Staff
-        </button>
-        <button
-          type="button"
-          onClick={handleDeleteSelected}
-          className="btn btn-danger mx-3"
-          disabled={selectedStaff.length === 0}
-        >
-          Save
-        </button>
+          <p
+            style={{
+              position: "absolute",
+              bottom: "1px",
+              height: "auto",
+              width: "98px",
+              margin: "0",
+              fontWeight: "bolder",
+            }}
+          >
+            Staff List
+          </p>
+          <button
+            type="button"
+            onClick={() => setModal(true)}
+            className="bg-[#35C0E4] hover:bg-[#2BAFD0] text-white font-bold py-2 px-6 rounded-md shadow-md transition-all duration-200"
+            style={{
+              position: "absolute",
+              right: "20px",
+              top: "20px",
+              width: "139px",
+              height: "46px",
+            }}
+          >
+            + Add Staff
+          </button>
+        </div>
+        <div>
+          <input
+            placeholder="Search"
+            style={{
+              width: "214px",
+              height: "39px",
+              backgroundColor: "white",
+              border: "1px solid #ccc",
+              borderRadius: "5px",
+              padding: "5px 10px",
+              outline: "none",
+            }}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)} // Search input handler
+          />
+          <button
+            className="bg-[#35C0E4] hover:bg-[#2BAFD0] text-white font-bold py-2 px-6 rounded-md shadow-md transition-all duration-200"
+            style={{ marginLeft: "20px" }}
+          >
+            Search
+          </button>
+
+          <button
+            type="button"
+            onClick={handleDeleteSelected}
+            className="btn btn-danger mx-3"
+            disabled={selectedStaff.length === 0}
+          >
+            Delete Selected
+          </button>
+        </div>
       </div>
 
       {/* Staff Table */}
       <div className="table1 table-responsive">
-        <table className="table table-bordered">
+        <table className="table ">
           <thead>
             <tr>
               <th>
@@ -134,22 +194,22 @@ const Staff = () => {
                   type="checkbox"
                   onChange={(e) =>
                     setSelectedStaff(
-                      e.target.checked ? data.map((staff: any) => staff.id) : []
+                      e.target.checked
+                        ? filteredData.map((staff: any) => staff.id)
+                        : []
                     )
                   }
-                  checked={selectedStaff.length === data?.length}
+                  checked={selectedStaff.length === filteredData?.length}
                 />
               </th>
-              <th>#</th>
-              <th>First Name</th>
-              <th>Last Name</th>
+              <th>Staff Name</th>
               <th>Email</th>
               <th>Gender</th>
               <th>Phone Number</th>
             </tr>
           </thead>
           <tbody>
-            {data?.map((staff: any, index: number) => (
+            {filteredData?.map((staff: any, index: number) => (
               <tr key={staff.id}>
                 <td>
                   <input
@@ -158,9 +218,10 @@ const Staff = () => {
                     onChange={() => handleCheckboxChange(staff.id)}
                   />
                 </td>
-                <td>{index + 1}</td>
-                <td>{staff.firstname}</td>
-                <td>{staff.lastname}</td>
+                <td>
+                  {staff.firstname}
+                  {staff.lastname}
+                </td>
                 <td>{staff.email}</td>
                 <td>{staff.gender}</td>
                 <td>{staff.phoneno}</td>
@@ -201,79 +262,29 @@ const Staff = () => {
                     {/* Form Fields */}
                     <div className="mb-3">
                       <label>First Name</label>
-                      <Field
-                        name="firstname"
-                        className="form-control"
-                        placeholder="Enter first name"
-                      />
-                      <ErrorMessage
-                        name="firstname"
-                        component="div"
-                        className="text-danger"
-                      />
+                      <Field name="firstname" className="form-control" />
+                      <ErrorMessage name="firstname" className="text-danger" />
                     </div>
                     <div className="mb-3">
                       <label>Last Name</label>
-                      <Field
-                        name="lastname"
-                        className="form-control"
-                        placeholder="Enter last name"
-                      />
-                      <ErrorMessage
-                        name="lastname"
-                        component="div"
-                        className="text-danger"
-                      />
+                      <Field name="lastname" className="form-control" />
+                      <ErrorMessage name="lastname" className="text-danger" />
                     </div>
                     <div className="mb-3">
                       <label>Email</label>
-                      <Field
-                        type="email"
-                        name="email"
-                        className="form-control"
-                        placeholder="Enter email"
-                      />
-                      <ErrorMessage
-                        name="email"
-                        component="div"
-                        className="text-danger"
-                      />
-                    </div>
-                    <div className="mb-3">
-                      <label>Gender</label>
-                      <Field as="select" name="gender" className="form-control">
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                        <option value="other">Other</option>
-                      </Field>
+                      <Field name="email" className="form-control" />
+                      <ErrorMessage name="email" className="text-danger" />
                     </div>
                     <div className="mb-3">
                       <label>Phone Number</label>
-                      <Field
-                        name="phoneno"
-                        className="form-control"
-                        placeholder="Enter phone number"
-                      />
-                      <ErrorMessage
-                        name="phoneno"
-                        component="div"
-                        className="text-danger"
-                      />
+                      <Field name="phoneno" className="form-control" />
+                      <ErrorMessage name="phoneno" className="text-danger" />
                     </div>
                     <button type="submit" className="btn btn-success">
                       Submit
                     </button>
                   </Form>
                 </Formik>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  onClick={() => setModal(false)}
-                >
-                  Close
-                </button>
               </div>
             </div>
           </div>

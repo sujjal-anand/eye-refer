@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import io from "socket.io-client";
 import "./Chat.css";
 import { toast } from "react-toastify";
-
 import axios from "axios";
 
 const socket = io("http://localhost:5001/");
@@ -81,7 +80,7 @@ const Chat: React.FC = () => {
       console.log(data, "JJJJJJJ");
       setMessages((prev: any) => [...prev, data]);
     });
-  }, []); //yj
+  }, []);
 
   const openChat = (
     patient: any,
@@ -103,8 +102,6 @@ const Chat: React.FC = () => {
     socket.emit("joinchat", chatData);
   };
 
-  // console.log("boom-------->", chatdata);
-
   const sendMessage = async () => {
     if (newMessage.trim() === "") {
       toast.warn("Please Enter Message");
@@ -120,6 +117,12 @@ const Chat: React.FC = () => {
       };
       socket.emit("send_message", data);
       setNewMessage("");
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      sendMessage();
     }
   };
 
@@ -146,9 +149,7 @@ const Chat: React.FC = () => {
       </>
     );
   }
-  // console.log(pname);
-  // console.log("ssss", messages);
-  // console.log("------>", rooms);
+
   return (
     <>
       <div className="chat-layout">
@@ -197,7 +198,7 @@ const Chat: React.FC = () => {
           </div>
         </div>
 
-        {direct != 0 && (
+        {direct !== 0 && (
           <>
             {/* Chatbar */}
             <div className="chat-main">
@@ -225,7 +226,7 @@ const Chat: React.FC = () => {
                       )}
                     </p>
                     <p>
-                      {msg.sender_id != chatdata.user && (
+                      {msg.sender_id !== chatdata.user && (
                         <>
                           <span className="sendername">{dname}</span>
                         </>
@@ -233,8 +234,7 @@ const Chat: React.FC = () => {
                     </p>
                     <p>{msg.message}</p>
                     <span className="message-timestamp">
-                      {" "}
-                      {msg.createdAt.split("T")[0]}{" "}
+                      {msg.createdAt.split("T")[0]}
                     </span>
                   </div>
                 ))}
@@ -248,6 +248,7 @@ const Chat: React.FC = () => {
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   placeholder="Type a message..."
+                  onKeyDown={handleKeyDown} // Add this to handle Enter key press
                 />
                 <button className="chat-send-button" onClick={sendMessage}>
                   <svg
