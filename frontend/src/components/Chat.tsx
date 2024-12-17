@@ -15,6 +15,7 @@ const Chat: React.FC = () => {
   var chatdata = JSON.parse(localStorage.getItem("chatdata") || "{}");
   const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const direct = Object.keys(chatdata).length;
   const pname = localStorage.getItem("pname");
   const dname = localStorage.getItem("dname");
@@ -126,6 +127,10 @@ const Chat: React.FC = () => {
     }
   };
 
+  const filteredRooms = rooms?.room.filter((room: any) =>
+    room.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   if (isLoading) {
     return (
       <>
@@ -155,8 +160,19 @@ const Chat: React.FC = () => {
       <div className="chat-layout">
         {/* Sidebar */}
         <div className="chat-sidebar">
+          {/* Search Bar */}
+          <div className="chat-search-container">
+            <input
+              type="text"
+              className="chat-search-input"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search Chats..."
+            />
+          </div>
+
           <div className="chat-patient-list">
-            {rooms?.room.map((room: any) => (
+            {filteredRooms?.map((room: any) => (
               <>
                 <div
                   className="patient-item active mb-2"
