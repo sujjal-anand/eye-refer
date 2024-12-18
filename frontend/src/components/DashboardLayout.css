@@ -4,9 +4,12 @@
 }
 
 .nav-link.active {
-  background-color: #90ee90; /* Neon blue background */
-  color: black; /* White text color */
-  box-shadow: 0 0 10px #00f7ff; /* Neon glow effect */
+  background-color: #f5f5f5;
+  color: #00ffaa; /* White text color */
+  width: 150px;
+  height: 36px;
+  border-left: solid 3px;
+  padding: 8px;
 }
 
 .sidebar {

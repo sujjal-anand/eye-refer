@@ -248,7 +248,8 @@ const Chat: React.FC = () => {
                         </>
                       )}
                     </p>
-                    <p>{msg.message}</p>
+                    <p>{msg.message} </p>
+
                     <span className="message-timestamp">
                       {msg.createdAt.split("T")[0]}
                     </span>
