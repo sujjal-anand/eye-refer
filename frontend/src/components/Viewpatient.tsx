@@ -1,14 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React from "react";
+import React, { useRef } from "react";
 import { useParams } from "react-router-dom";
 import { Local } from "../env/config";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
+import { jsPDF } from "jspdf";
 
 const Viewpatient = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const componentRef = useRef(null); // Reference for the component to print
+
   // Fetch patient data using TanStack Query
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["viewpatient", id], // Include `id` in the query key for caching
@@ -53,10 +56,41 @@ const Viewpatient = () => {
     surgerydate,
   } = data;
 
+  // Function to generate and download PDF
+  const downloadPDF = () => {
+    const doc = new jsPDF();
+
+    // Adding title to the PDF
+    doc.setFontSize(18);
+    doc.text("Patient Details", 20, 20);
+
+    // Adding patient details
+    doc.setFontSize(12);
+    doc.text(`Name: ${firstname} ${lastname}`, 20, 30);
+    doc.text(`Email: ${email}`, 20, 40);
+    doc.text(`Phone: ${phone_no}`, 20, 50);
+    doc.text(`Gender: ${gender}`, 20, 60);
+    doc.text(`Date of Birth: ${dob}`, 20, 70);
+    doc.text(`Disease Name: ${disease_name}`, 20, 80);
+    doc.text(`Insurance Company: ${insurance_company_name}`, 20, 90);
+    doc.text(`Insurance Plan: ${insurance_plan}`, 20, 100);
+    doc.text(`Location: ${location}`, 20, 110);
+    doc.text(`Notes: ${notes}`, 20, 120);
+    doc.text(`Referred By: ${referredtoname}`, 20, 130);
+    doc.text(`Return to Care: ${return_to_care ? "Yes" : "No"}`, 20, 140);
+    doc.text(`Surgery Date: ${surgerydate || "N/A"}`, 20, 150);
+
+    // Adding Documentation link
+    doc.text(`Documentation: ${documentation}`, 20, 160);
+
+    // Save the PDF
+    doc.save("patient-details.pdf");
+  };
+
   return (
     <div className="container my-5">
       <div className="card shadow-lg ms-auto" style={{ maxWidth: "800px" }}>
-        <div className="card-body">
+        <div className="card-body" ref={componentRef}>
           <button
             onClick={() => navigate(-1)}
             className="flex items-center text-blue-500 hover:text-blue-700 mb-4"
@@ -163,6 +197,15 @@ const Viewpatient = () => {
           </div>
         </div>
       </div>
+
+      {/* Download PDF Button */}
+      <button
+        onClick={downloadPDF}
+        className="btn btn-primary"
+        style={{ position: "absolute", right: "93px", top: "128px" }}
+      >
+        Download PDF
+      </button>
     </div>
   );
 };

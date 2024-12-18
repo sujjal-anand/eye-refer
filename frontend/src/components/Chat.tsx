@@ -196,13 +196,13 @@ const Chat: React.FC = () => {
                 >
                   <h5>{room.name}</h5>
                   <p>
-                    {room.doc1.id != rooms.user.id && (
+                    {room.doc1.id !== rooms.user.id && (
                       <>
                         {room.doc1.firstname} {room.doc1.lastname}
                       </>
                     )}
 
-                    {room.doc2.id != rooms.user.id && (
+                    {room.doc2.id !== rooms.user.id && (
                       <>
                         {room.doc2.firstname} {room.doc2.lastname}
                       </>
@@ -248,10 +248,15 @@ const Chat: React.FC = () => {
                         </>
                       )}
                     </p>
-                    <p>{msg.message} </p>
+                    <p>{msg.message}</p>
 
+                    {/* Format and display timestamp in 24-hour format */}
                     <span className="message-timestamp">
-                      {msg.createdAt.split("T")[0]}
+                      {new Date(msg.createdAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: false, // This forces 24-hour format
+                      })}
                     </span>
                   </div>
                 ))}

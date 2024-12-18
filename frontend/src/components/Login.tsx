@@ -159,7 +159,6 @@ const Login = () => {
         </div>
       </div>
 
-      <ToastContainer position="top-right" autoClose={5000} closeOnClick />
       <footer className="bg-gray-800 text-white text-center py-2 fixed bottom-0 w-full">
         &copy; {new Date().getFullYear()} Eye Refer.
       </footer>

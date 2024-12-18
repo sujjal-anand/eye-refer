@@ -27,6 +27,7 @@ import AppointmentList from "./components/appointmentlist";
 import Patientsreceived from "./components/patientreceive";
 import Updateappointment from "./components/Updateappointment";
 import Notification from "./components/Notification";
+import { ToastContainer } from "react-toastify";
 // import Chathistory from "./components/Chathistory";
 
 function App() {
