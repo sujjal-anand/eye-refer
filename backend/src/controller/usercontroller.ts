@@ -336,8 +336,10 @@ export const odoctors = async (req: any, res: any) => {
 export const getreferredpatient = async (req: any, res: any) => {
   try {
     const search = req.query.search;
+    const sortby = req.query.sortby;
+    const sortin = req.query.sortin;
     const page = parseInt(req.query.page) || 1; // Default to page 1 if not specified
-    const limit = parseInt(req.query.limit) || 2; // Default limit of 3 patients per page
+    const limit = parseInt(req.query.limit) || 20; // Default limit of 3 patients per page
     const offset = (page - 1) * limit;
     const id = req.user.id;
     const referredcount = await Patients.count({
@@ -364,6 +366,7 @@ export const getreferredpatient = async (req: any, res: any) => {
       },
       limit,
       offset,
+      order: [[sortby, sortin]],
     });
     // console.log(",", response.rows);
 
@@ -468,6 +471,7 @@ export const updatepatient = async (req: any, res: any) => {
   try {
     const { id } = req.params;
     console.log("<<<", id);
+    const { appointmenttype, appointmentdate } = req?.body;
     const user = await Patients.findOne({ where: { id } });
     const response = await user?.update(req?.body);
     res.json(response).status(200);
@@ -740,7 +744,7 @@ export const getappointmentlist = async (req: any, res: any) => {
     const response = await Patients.findAll({
       where: {
         referredTO: id,
-        Status: "pending",
+        Status: "scheduled",
       },
     });
     console.log(response);

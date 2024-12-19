@@ -6,17 +6,16 @@ import placed from "../assets/image.png";
 import doctors from "../assets/image copy 2.png";
 import completed from "../assets/image copy.png";
 import { Local } from "../env/config";
-import { json } from "stream/consumers";
-import { socket } from "../utils/socketconnection";
+
 import { toast, ToastContainer } from "react-toastify";
-import { queryClient } from "..";
 
 const ODdashboard = () => {
   const token = localStorage.getItem("authtoken");
+  const [currentselected, setcurrentselected] = useState<any>("");
+  const [sortby, setsortby] = useState<any>("");
   const [mddoctor, setmddoctor] = useState<any>([]);
   const [patientcount, setpatientcount] = useState<any>("");
   const [referredpatient, setreferredpatient] = useState<any>([]);
-  const [referredupdatedat, setreferredupdatedat] = useState<any>("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [referredcompleted, setreferredcompleted] = useState<any>();
@@ -42,7 +41,7 @@ const ODdashboard = () => {
   useEffect(() => {
     const fetchReferredPatients = async () => {
       const response = await axios.get(
-        `${Local.BASE_URL}/${Local.GET_REFERRED_PATIENT}?page=${currentPage}&limit=10&search=${search}`,
+        `${Local.BASE_URL}/${Local.GET_REFERRED_PATIENT}?page=${currentPage}&limit=20&search=${search}&sortby=firstname&sortin=DESC`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -52,7 +51,7 @@ const ODdashboard = () => {
       setpatientcount(response?.data.count);
       setreferredpatient(response?.data.rows);
       setreferredcompleted(response.data.refercompleted);
-      setTotalPages(Math.ceil(response?.data.count / 10));
+      setTotalPages(Math.ceil(response?.data.count / 20));
     };
     if (token) {
       fetchReferredPatients();
@@ -228,7 +227,12 @@ const ODdashboard = () => {
         <table className="min-w-full bg-white shadow-md rounded-lg border border-gray-300">
           <thead>
             <tr className="bg-white text-gray-600 text-sm leading-[0.75] w-[1225px] h-[56px] border-b border-gray-200">
-              <th className="py-[14px] px-[10px] text-center whitespace-nowrap pointer-events-auto">
+              <th
+                onClick={() => {
+                  setcurrentselected("firstname");
+                }}
+                className="py-[14px] px-[10px] text-center whitespace-nowrap pointer-events-auto"
+              >
                 Patient Name
               </th>
               <th className="py-[14px] px-[10px] text-center whitespace-nowrap pointer-events-auto">

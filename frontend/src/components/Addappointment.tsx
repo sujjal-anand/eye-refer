@@ -43,8 +43,6 @@ const Addappointment = () => {
     patientname: "",
     appointmentdate: "",
     appointmenttype: "",
-    consulatationdate: null,
-    surgerydate: null,
     appointmentstatus: "true",
     Status: "scheduled",
   };
@@ -52,10 +50,7 @@ const Addappointment = () => {
   // Handle form submission
   const handleSubmit = async (values: any, { resetForm }: any) => {
     try {
-      console.log(values.patientname);
       const patientid = values.patientname;
-
-      console.log("valuessssssssssssssssssssssssssssss", values);
 
       const response = await axios.put(
         `http://localhost:5001/users/updatepatient/${values.patientname}`,
@@ -167,45 +162,7 @@ const Addappointment = () => {
                 <option value="Surgery">Surgery</option>
               </Field>
             </div>
-            {values.appointmenttype === "Consultation" && (
-              <div className="mb-4">
-                <label
-                  htmlFor="consulatationdate"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Consultation Date
-                </label>
-                <Field
-                  type="date"
-                  id="consulatationdate"
-                  name="consulatationdate"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                />
-              </div>
-            )}
 
-            {/* Conditional Surgery Date Field */}
-            {values.appointmenttype === "Surgery" && (
-              <div className="mb-4">
-                <label
-                  htmlFor="surgerydate"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Surgery Date
-                </label>
-                <Field
-                  type="date"
-                  id="surgerydate"
-                  name="surgerydate"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                />
-                <ErrorMessage
-                  name="surgerydate"
-                  component="div"
-                  className="text-red-600 text-xs mt-1"
-                />
-              </div>
-            )}
             {/* Submit Button */}
             <div className="mt-6">
               <button

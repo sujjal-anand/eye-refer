@@ -29,9 +29,8 @@ const Updateappointment = () => {
 
       setSuccess(response.data.message);
       setError("");
-      setTimeout(() => {
-        navigate("/app/appointmentlist");
-      }, 2000);
+
+      navigate("/app/appointmentlist");
     } catch (err: any) {
       setError(err.response?.data?.message || "Something went wrong");
       setSuccess("");

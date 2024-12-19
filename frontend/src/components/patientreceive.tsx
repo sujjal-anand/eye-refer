@@ -3,23 +3,22 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { TiEye } from "react-icons/ti";
+import { Local } from "../env/config";
 
 const Patientsreceived = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("authtoken");
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search input
   const pageSize = 10; // Number of rows per page
 
   const fetchReferredReceived = async () => {
-    const response = await axios.get(
-      "http://localhost:5001/users/referrreceive",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await axios.get(`${Local.BASE_URL}/referrreceive`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     return response.data;
   };
 
@@ -36,11 +35,21 @@ const Patientsreceived = () => {
     return <p className="text-center text-red-500">Error: {error.message}</p>;
   }
 
+  // Filter data based on search query
+  const filteredData = data?.rows?.filter((patient: any) => {
+    const fullName = `${patient.firstname} ${patient.lastname}`.toLowerCase();
+    return (
+      fullName.includes(searchQuery.toLowerCase()) || // Search by name
+      patient.dob.includes(searchQuery) || // Search by DOB
+      patient.referredtoname?.toLowerCase().includes(searchQuery.toLowerCase()) // Search by referred to name
+    );
+  });
+
   // Calculate paginated data
   const startIndex = (currentPage - 1) * pageSize;
-  const paginatedData = data?.rows?.slice(startIndex, startIndex + pageSize);
+  const paginatedData = filteredData?.slice(startIndex, startIndex + pageSize);
 
-  const totalPages = Math.ceil(data?.rows?.length / pageSize);
+  const totalPages = Math.ceil(filteredData?.length / pageSize);
 
   return (
     <div
@@ -53,6 +62,15 @@ const Patientsreceived = () => {
       >
         <h2 className="text-2xl font-semibold text-gray-700">Refer Received</h2>
       </div>
+
+      {/* Search Input */}
+      <input
+        type="text"
+        placeholder="Search by Name, DOB, or Referred To"
+        className="w-full p-2 mb-4 border rounded-md"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
 
       <div className="table-container bg-white p-2 rounded-lg overflow-x-auto shadow-md transition-shadow duration-300 ease-in-out">
         <div className="overflow-y-auto" style={{ maxHeight: "400px" }}>

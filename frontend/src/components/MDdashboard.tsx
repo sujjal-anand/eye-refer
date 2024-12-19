@@ -270,10 +270,10 @@ const MDdashboard = () => {
                   {data.referredtoname}
                 </td>
                 <td className="py-[14px] px-[10px] text-center whitespace-nowrap">
-                  {data.consulatationdate}
+                  {data.consulatationdate ? data.consulatationdate : "-"}
                 </td>
                 <td className="py-[14px] px-[10px] text-center whitespace-nowrap">
-                  -
+                  {data.surgerydate ? data.surgerydate : "-"}
                 </td>
                 <td className="py-[14px] px-[10px] text-center whitespace-nowrap">
                   <span
@@ -325,7 +325,7 @@ const MDdashboard = () => {
                 </td>
                 <td className="py-[14px] px-[10px] text-center whitespace-nowrap">
                   <button
-                    onClick={() => navigate(`/app/referral/${data.id}/details`)}
+                    onClick={() => navigate(`/app/viewpatient/${data.id}`)}
                     className="text-blue-500 hover:underline"
                   >
                     Details
